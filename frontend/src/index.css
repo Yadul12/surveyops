@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #0F1E36;
+    background-color: #F6F6F4;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer components {
+  .ops-surface {
+    @apply bg-surface border border-hairline rounded shadow-card;
+  }
+
+  .ops-input {
+    @apply w-full rounded-sm border border-hairlineStrong bg-surface px-2.5 py-1.5 text-[13px] text-navy placeholder:text-navy-400 focus:border-teal-accent focus:outline-none focus:ring-1 focus:ring-teal-accent/30 disabled:bg-recessed disabled:text-navy-500;
+  }
+
+  .ops-btn-primary {
+    @apply inline-flex items-center justify-center gap-1.5 rounded-sm bg-teal-accent px-3 py-1.5 text-[13px] font-medium text-white transition-colors hover:bg-teal-hover focus:outline-none focus:ring-2 focus:ring-teal-accent/40 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .ops-btn-secondary {
+    @apply inline-flex items-center justify-center gap-1.5 rounded-sm border border-hairlineStrong bg-surface px-3 py-1.5 text-[13px] font-medium text-navy transition-colors hover:bg-recessed focus:outline-none focus:ring-2 focus:ring-navy/15 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .ops-btn-danger {
+    @apply inline-flex items-center justify-center gap-1.5 rounded-sm border border-crimson-border bg-crimson-tint px-3 py-1.5 text-[13px] font-medium text-crimson-err transition-colors hover:bg-red-200/70 focus:outline-none focus:ring-2 focus:ring-crimson-err/30 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .ops-th {
+    @apply px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-wider text-navy-500 border-b border-hairline bg-canvas/70 select-none whitespace-nowrap;
+  }
+
+  .ops-td {
+    @apply px-3 py-2.5 text-[13px] text-navy border-b border-hairline align-middle;
+  }
+}
+
+/* Custom restrained scrollbars */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #D0D5DD;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #98A2B3;
+}

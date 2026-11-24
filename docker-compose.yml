@@ -1,0 +1,112 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: surveyops-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-surveyops}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-surveyops_secure_pass}
+      POSTGRES_DB: ${POSTGRES_DB:-surveyops}
+    ports:
+      - "${POSTGRES_HOST_PORT:-5472}:5432"
+    volumes:
+      - surveyops_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-surveyops} -d ${POSTGRES_DB:-surveyops}"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: surveyops-redis
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "${REDIS_HOST_PORT:-6382}:6379"
+    volumes:
+      - surveyops_redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: surveyops-backend
+    environment:
+      APP_NAME: SurveyOps
+      APP_ENV: ${APP_ENV:-production}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-surveyops}:${POSTGRES_PASSWORD:-surveyops_secure_pass}@postgres:5432/${POSTGRES_DB:-surveyops}
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
+      PIPELINE_EAGER_MODE: ${PIPELINE_EAGER_MODE:-false}
+      SECRET_KEY: ${SECRET_KEY:-surveyops-dev-secret-key-change-in-production-32chars}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3070,http://localhost:5174,http://127.0.0.1:3070,http://127.0.0.1:5174}
+      BENCHMARKS_DIR: /app/benchmarks
+    ports:
+      - "${API_HOST_PORT:-8070}:8000"
+    volumes:
+      - ./benchmarks:/app/benchmarks
+      - ./scripts:/app/scripts
+      - ./loadtests:/app/loadtests
+      - ./backend/tests:/app/tests
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: surveyops-worker
+    command: ["celery", "-A", "app.workers.celery_app.celery_app", "worker", "--loglevel=info", "--concurrency=4"]
+    environment:
+      APP_NAME: SurveyOps
+      APP_ENV: ${APP_ENV:-production}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-surveyops}:${POSTGRES_PASSWORD:-surveyops_secure_pass}@postgres:5432/${POSTGRES_DB:-surveyops}
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
+      PIPELINE_EAGER_MODE: "false"
+      SECRET_KEY: ${SECRET_KEY:-surveyops-dev-secret-key-change-in-production-32chars}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: /api/v1
+    container_name: surveyops-frontend
+    ports:
+      - "${FRONTEND_HOST_PORT:-3070}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  surveyops_pgdata:
+  surveyops_redis:

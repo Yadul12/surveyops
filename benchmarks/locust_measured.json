@@ -1,0 +1,139 @@
+{
+  "benchmark_type": "locust_load_test",
+  "measured_at": "2026-11-24T14:00:15.845971+00:00",
+  "environment": {
+    "python_version": "3.12.16",
+    "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.41",
+    "cpu_count": 16,
+    "target_host": "http://localhost:8000"
+  },
+  "config": {
+    "concurrent_users": 25,
+    "spawn_rate_per_sec": 5,
+    "duration_seconds": 25
+  },
+  "locust_summary": {
+    "concurrent_users": 25,
+    "duration_seconds": 25,
+    "requests": 648,
+    "failures": 0,
+    "failure_rate_pct": 0.0,
+    "requests_per_sec": 26.98,
+    "avg_ms": 56.1,
+    "p50_ms": 42.0,
+    "p95_ms": 140.0,
+    "p99_ms": 190.0
+  },
+  "endpoints": [
+    {
+      "method": "GET",
+      "endpoint": "/api/v1/analytics/overview",
+      "requests": 81,
+      "failures": 0,
+      "avg_ms": 38.8,
+      "p50_ms": 29.0,
+      "p95_ms": 96.0,
+      "p99_ms": 120.0,
+      "rps": 3.37
+    },
+    {
+      "method": "GET",
+      "endpoint": "/api/v1/assignments/my-field-assignments",
+      "requests": 15,
+      "failures": 0,
+      "avg_ms": 83.8,
+      "p50_ms": 60.0,
+      "p95_ms": 160.0,
+      "p99_ms": 160.0,
+      "rps": 0.62
+    },
+    {
+      "method": "POST",
+      "endpoint": "/api/v1/auth/login [agent]",
+      "requests": 15,
+      "failures": 0,
+      "avg_ms": 125.0,
+      "p50_ms": 120.0,
+      "p95_ms": 180.0,
+      "p99_ms": 180.0,
+      "rps": 0.62
+    },
+    {
+      "method": "POST",
+      "endpoint": "/api/v1/auth/login [analyst]",
+      "requests": 10,
+      "failures": 0,
+      "avg_ms": 126.7,
+      "p50_ms": 110.0,
+      "p95_ms": 190.0,
+      "p99_ms": 190.0,
+      "rps": 0.42
+    },
+    {
+      "method": "GET",
+      "endpoint": "/api/v1/pipeline/summary",
+      "requests": 20,
+      "failures": 0,
+      "avg_ms": 76.7,
+      "p50_ms": 76.0,
+      "p95_ms": 99.0,
+      "p99_ms": 99.0,
+      "rps": 0.83
+    },
+    {
+      "method": "GET",
+      "endpoint": "/api/v1/quality/issues",
+      "requests": 55,
+      "failures": 0,
+      "avg_ms": 40.7,
+      "p50_ms": 32.0,
+      "p95_ms": 120.0,
+      "p99_ms": 150.0,
+      "rps": 2.29
+    },
+    {
+      "method": "POST",
+      "endpoint": "/api/v1/responses [POST single]",
+      "requests": 309,
+      "failures": 0,
+      "avg_ms": 55.7,
+      "p50_ms": 42.0,
+      "p95_ms": 130.0,
+      "p99_ms": 210.0,
+      "rps": 12.87
+    },
+    {
+      "method": "GET",
+      "endpoint": "/api/v1/responses [paginated]",
+      "requests": 57,
+      "failures": 0,
+      "avg_ms": 30.2,
+      "p50_ms": 26.0,
+      "p95_ms": 67.0,
+      "p99_ms": 82.0,
+      "rps": 2.37
+    },
+    {
+      "method": "POST",
+      "endpoint": "/api/v1/responses/batch [POST 5 items]",
+      "requests": 76,
+      "failures": 0,
+      "avg_ms": 67.5,
+      "p50_ms": 55.0,
+      "p95_ms": 150.0,
+      "p99_ms": 220.0,
+      "rps": 3.16
+    },
+    {
+      "method": "GET",
+      "endpoint": "/api/v1/surveys",
+      "requests": 10,
+      "failures": 0,
+      "avg_ms": 100.8,
+      "p50_ms": 88.0,
+      "p95_ms": 190.0,
+      "p99_ms": 190.0,
+      "rps": 0.42
+    }
+  ]
+}

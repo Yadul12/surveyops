@@ -1,0 +1,41 @@
+{
+  "benchmark_type": "synthetic_100k_scale_benchmark",
+  "measured_at": "2026-11-24T13:59:31.802362+00:00",
+  "environment": {
+    "python_version": "3.12.16",
+    "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.41",
+    "cpu_count": 16,
+    "database": "PostgreSQL 16 (Docker container)",
+    "broker": "Redis 7 + Celery 5.4"
+  },
+  "config": {
+    "requested_responses": 100000,
+    "batch_size": 2000,
+    "random_seed": 20261124,
+    "survey_code": "CIV-2026-SCALE",
+    "questions_per_response": 3
+  },
+  "metrics": {
+    "total_responses_generated": 100000,
+    "total_responses_in_db": 100428,
+    "total_answers_materialized": 300000,
+    "quality_issues_created": 8872,
+    "approved_count": 97064,
+    "flagged_count": 1934,
+    "rejected_count": 1002,
+    "ingestion_elapsed_sec": 178.396,
+    "ingestion_rows_per_sec": 560.6,
+    "answers_rows_per_sec": 1681.7,
+    "idempotent_replay_tested": 500,
+    "idempotent_replay_duplicates_inserted": 0,
+    "idempotent_replay_elapsed_ms": 271.97
+  },
+  "sql_query_latencies_ms": {
+    "overview_kpis_100k_aggregation": 38.42,
+    "daily_trends_30d_group_by": 38.21,
+    "geographic_district_breakdown": 26.06,
+    "question_distributions_300k_answers": 721.9,
+    "paginated_list_offset_50000_indexed": 107.88,
+    "total_table_count_query": 14.19
+  }
+}
